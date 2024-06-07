@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FitCare</string>
+    <string name="customer_name">Nombre</string>
+    <string name="last_visit">Última visita</string>
+    <string name="next_visit">Próxima visita</string>
+    <string name="physiotherapist_name">Fisioterapeuta</string>
+</resources>
