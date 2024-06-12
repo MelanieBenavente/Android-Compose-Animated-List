@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.melaniadev.fitcare.ui.CustomerListScreen
 import com.melaniadev.fitcare.ui.DetailScreen
+import com.melaniadev.fitcare.ui.Routes
+import com.melaniadev.fitcare.ui.getNavGraph
 import com.melaniadev.fitcare.ui.theme.FitCareTheme
 import com.melaniadev.fitcare.ui.mockList
 
@@ -27,10 +29,8 @@ class MainActivity : ComponentActivity() {
                     
                 ) {
                     val navigationController = rememberNavController()
-                    NavHost(navController = navigationController, startDestination = "homeScreen"){
-                        composable("homeScreen"){ CustomerListScreen(customersList = mockList(), navigationController) }
-                        composable("detailScreen/{name}") { backStackEntry ->
-                            DetailScreen(navigationController, backStackEntry.arguments?.getString("name").orEmpty()) }
+                    NavHost(navController = navigationController, startDestination = Routes.HOME.name){
+                       getNavGraph(navigationController)
                     }
                 }
             }
