@@ -1,4 +1,3 @@
 package com.melaniadev.fitcare.ui
 
-class Visit {
-}
+data class Visit(val typeOfVisit : String, val date: String)
