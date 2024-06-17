@@ -30,7 +30,6 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         lineHeight = 24.sp,
         fontSize = 16.sp,
-        color = Color.LightGray,
         letterSpacing = 0.sp
     )
 

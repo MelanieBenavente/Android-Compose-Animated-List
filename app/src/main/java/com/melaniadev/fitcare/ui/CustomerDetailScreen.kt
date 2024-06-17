@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.transform.CircleCropTransformation
 import com.melaniadev.fitcare.R
 import com.melaniadev.fitcare.ui.components.TopBarBackButton
+import com.melaniadev.fitcare.ui.theme.localCustomColorsPalette
 
 val visitHistoryMocked = listOf(
     Visit(
@@ -69,7 +71,8 @@ fun DetailScreen(navigationController: NavHostController, name: String) {
             navigationController, title = stringResource(R.string.user_profile_top_bar_title)
         )
     }, content = { padding ->
-        Column(modifier = Modifier.padding(padding)
+        Column(modifier = Modifier
+            .padding(padding)
             .padding(horizontal = 20.dp, vertical = 15.dp)) {
             DetailScreenUserImage(customer = mockedCustomer)
             DetailScreenContent(customer = mockedCustomer)
@@ -101,13 +104,18 @@ fun DetailScreenContent(customer: Customer) {
     Column(modifier = Modifier.padding(vertical = 10.dp)) {
         Text(
             text = customer.name,
-            modifier = Modifier
-                .align(alignment = Alignment.Start),
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
             text = customer.gender + ", " + customer.age + " years old",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = localCustomColorsPalette.current.customTextColor
+
+        )
+        Text(
+            text = customer.height +" cm"+ " | " + customer.weight + " kg",
+            style = MaterialTheme.typography.bodyMedium,
+            color = localCustomColorsPalette.current.customTextColor
         )
     }
 }
