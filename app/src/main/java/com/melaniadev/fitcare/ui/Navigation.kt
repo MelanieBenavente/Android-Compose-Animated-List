@@ -16,6 +16,6 @@ fun NavGraphBuilder.getNavGraph(navigationController: NavHostController) {
         )
     }
     composable(Routes.CUSTOMER_DETAIL.name + "/{name}") { backStackEntry ->
-        DetailScreen(navigationController, backStackEntry.arguments?.getString("name").orEmpty())
+        DetailCustomerScreen(navigationController, backStackEntry.arguments?.getString("name").orEmpty())
     }
 }
