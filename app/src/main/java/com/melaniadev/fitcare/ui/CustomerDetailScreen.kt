@@ -132,3 +132,89 @@ fun InfoBioComponent(customer: Customer) {
     }
 }
 
+@Composable
+fun ActionButtonsComponent(navigationController: NavHostController) {
+    Row(modifier = Modifier.padding(vertical = 10.dp)) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .weight(1f)
+                .fillMaxHeight(0.1f)
+                .padding(end = 5.dp),
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(secondaryBlue),
+            contentPadding = PaddingValues()
+        ) {
+            Text(
+                text = "Schedule visit",
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.align(Alignment.CenterVertically),
+                color = localCustomColorsPalette.current.customButtonTextColor
+            )
+        }
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .weight(1f)
+                .fillMaxHeight(0.1f)
+                .padding(start = 5.dp),
+            shape = RoundedCornerShape(10.dp),
+            colors = ButtonDefaults.buttonColors(primaryBlue),
+            contentPadding = PaddingValues()
+        ) {
+            Text(
+                text = "Send message",
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.align(Alignment.CenterVertically),
+                color = localCustomColorsPalette.current.customButtonTextColor
+            )
+        }
+    }
+}
+
+@Composable
+fun IconComponent(iconDrawable: Int, contentDescription: String) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = iconComponentBackground, shape = RoundedCornerShape(10.dp)
+            )
+            .size(48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(24.dp)
+                .align(Alignment.Center),
+            painter = painterResource(iconDrawable),
+            contentDescription = contentDescription,
+            tint = Color.Black
+        )
+    }
+}
+
+@Composable
+fun PersonalInfoComponent(header: String, body: String) {
+    Column(modifier = Modifier.padding(10.dp)) {
+        Text(
+            text = header,
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        Text(
+            text = body,
+            style = MaterialTheme.typography.bodySmall,
+            color = localCustomColorsPalette.current.customTextColor
+        )
+    }
+}
+
+@Composable
+fun LeftIconInfoComponent(iconDrawable: Int, contentDescription: String, header: String, body: String ) {
+    Row(modifier = Modifier.padding(vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
+        IconComponent(iconDrawable = iconDrawable, contentDescription = contentDescription)
+        PersonalInfoComponent(header = header, body = body)
+    }
+}
