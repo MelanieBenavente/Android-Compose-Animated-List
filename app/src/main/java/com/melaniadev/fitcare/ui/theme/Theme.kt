@@ -1,7 +1,6 @@
 package com.melaniadev.fitcare.ui.theme
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -31,7 +30,6 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun FitCareTheme(
     darkTheme: Boolean = isSystemInDarkTheme(), // Dynamic color is available on Android 12+
@@ -46,7 +44,7 @@ fun FitCareTheme(
         else -> LightColorScheme
     }
     //logic for which custom palette to use
-    val customColorsPalette = if(!darkTheme) lightCustomColorsPalette else darkCustomColorsPalette
+    val customColorsPalette = if(!darkTheme) lightThemeCustomPalette else darkThemeCustomPalette
     CompositionLocalProvider(localCustomColorsPalette provides customColorsPalette){
         MaterialTheme(
             colorScheme = colorScheme, typography = Typography, content = content

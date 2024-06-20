@@ -1,7 +1,6 @@
 package com.melaniadev.fitcare.ui.theme
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.material3.Typography
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +30,20 @@ val Typography = Typography(
         lineHeight = 24.sp,
         fontSize = 16.sp,
         letterSpacing = 0.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = FontFamily(Font(R.font.lexend)),
+        fontWeight = FontWeight.Normal,
+        lineHeight = 21.sp,
+        fontSize = 14.sp,
+        letterSpacing = (0).sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = FontFamily(Font(R.font.lexend_bold)),
+        fontWeight = FontWeight.ExtraBold,
+        lineHeight = 21.sp,
+        fontSize = 14.sp,
+        letterSpacing = (0).sp
     )
 
 /* Other default text styles to override
