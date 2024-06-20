@@ -8,14 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.melaniadev.fitcare.ui.CustomerListScreen
-import com.melaniadev.fitcare.ui.DetailScreen
 import com.melaniadev.fitcare.ui.Routes
 import com.melaniadev.fitcare.ui.getNavGraph
 import com.melaniadev.fitcare.ui.theme.FitCareTheme
-import com.melaniadev.fitcare.ui.mockList
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
