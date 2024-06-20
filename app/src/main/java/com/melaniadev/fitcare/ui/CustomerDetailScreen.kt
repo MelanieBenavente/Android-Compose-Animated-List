@@ -52,7 +52,7 @@ val mockedCustomer = Customer(
     weight = "42",
     height = "1.50",
     email = "lavienvert@gmail.com",
-    phone = "635239635",
+    phone = "635 23 96 35",
     imageUrl = "https://picsum.photos/200/300",
     visitHistory = visitHistoryMocked
 )
@@ -61,21 +61,28 @@ val mockedCustomer = Customer(
 @Composable
 fun DetailPreview() {
     val navigationController = rememberNavController()
-    DetailScreen(navigationController = navigationController, "")
+    DetailCustomerScreen(navigationController = navigationController, "")
 }
 
 @Composable
-fun DetailScreen(navigationController: NavHostController, name: String) {
+fun DetailCustomerScreen(navigationController: NavHostController, name: String) {
     Scaffold(topBar = {
         TopBarBackButton(
             navigationController, title = stringResource(R.string.user_profile_top_bar_title)
         )
     }, content = { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
-            .padding(horizontal = 20.dp, vertical = 15.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 20.dp, vertical = 15.dp)
+        ) {
             DetailScreenUserImage(customer = mockedCustomer)
-            DetailScreenContent(customer = mockedCustomer)
+            InfoBioComponent(customer = mockedCustomer)
+            ActionButtonsComponent(navigationController = navigationController)
+            mockedCustomer.email?.let { LeftIconInfoComponent(iconDrawable = R.drawable.email_vector, contentDescription = "Email", header = "Email", body = it) }
+            mockedCustomer.phone?.let { LeftIconInfoComponent(iconDrawable = R.drawable.phone_vector, contentDescription = "Phone number", header = "Phone", body = it) }
+            Text(text = "Assigned Professional", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(vertical = 5.dp))
+            LeftImageInfoComponent(imageUrl = "https://picsum.photos/200/300", header = mockedCustomer.physiotherapist, body = "Physical Therapist" )
         }
 
     })
@@ -84,8 +91,7 @@ fun DetailScreen(navigationController: NavHostController, name: String) {
 @Composable
 fun DetailScreenUserImage(customer: Customer) {
     Box(
-        modifier = Modifier
-            .background(color = Color.Transparent)
+        modifier = Modifier.background(color = Color.Transparent)
     ) {
         AsyncImage(
             contentScale = ContentScale.Crop,
@@ -100,20 +106,19 @@ fun DetailScreenUserImage(customer: Customer) {
 }
 
 @Composable
-fun DetailScreenContent(customer: Customer) {
+fun InfoBioComponent(customer: Customer) {
     Column(modifier = Modifier.padding(vertical = 10.dp)) {
         Text(
-            text = customer.name,
-            style = MaterialTheme.typography.bodyLarge
+            text = customer.name, style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = customer.gender + ", " + customer.age + " years old",
+            text = customer.gender.genderType + ", " + customer.age + " years old",
             style = MaterialTheme.typography.bodyMedium,
             color = localCustomColorsPalette.current.customTextColor
 
         )
         Text(
-            text = customer.height +" cm"+ " | " + customer.weight + " kg",
+            text = customer.height + " cm" + " | " + customer.weight + " kg",
             style = MaterialTheme.typography.bodyMedium,
             color = localCustomColorsPalette.current.customTextColor
         )
