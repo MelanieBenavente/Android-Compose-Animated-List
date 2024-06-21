@@ -64,6 +64,6 @@ fun ItemCustomerComponent(customer: Customer, navigationController: NavHostContr
         customer.nextVisit?.let{
             Text(text = customer.nextVisit, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
         }
-        Text(text = customer.physiotherapist, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(text = customer.professional.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
     }
 }
