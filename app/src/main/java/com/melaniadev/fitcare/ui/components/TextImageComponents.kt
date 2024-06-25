@@ -86,7 +86,7 @@ fun LeftIconInfoComponent(iconDrawable: Int, contentDescription: String, header:
 
 @Composable
 fun LeftImageInfoComponent(imageUrl: String, header: String, body: String) {
-    Row(modifier = Modifier.padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row( verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier.background(color = Color.Transparent)
         ) {
