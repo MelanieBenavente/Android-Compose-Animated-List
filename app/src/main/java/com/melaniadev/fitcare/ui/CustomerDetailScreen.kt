@@ -74,6 +74,7 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
 
     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
         TopBarBackButton(
+            isNavigable = true,
             navigationController,
             title = stringResource(R.string.user_profile_top_bar_title),
             scrollBehavior = scrollBehavior
@@ -158,7 +159,7 @@ fun AssignedProfessionalComponent(customer: Customer) {
         LeftImageInfoComponent(
             imageUrl = "https://picsum.photos/200/300",
             header = customer.professional.name,
-            body = customer.professional.therapyType?.therapyType.orEmpty()
+            body1 = customer.professional.therapyType?.therapyType.orEmpty()
         )
     }
 }

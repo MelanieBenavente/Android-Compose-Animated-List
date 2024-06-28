@@ -1,9 +1,6 @@
 package com.melaniadev.fitcare.ui.components
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,15 +18,17 @@ import com.melaniadev.fitcare.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarBackButton(navController: NavController, title: String, scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBarBackButton(isNavigable: Boolean, navController: NavController, title: String, scrollBehavior: TopAppBarScrollBehavior) {
     CenterAlignedTopAppBar(scrollBehavior = scrollBehavior, title = { Text(text = title, style = MaterialTheme.typography.titleLarge) }, navigationIcon = {
-        IconButton(onClick = { navController.navigateUp() }) {
-            Icon(modifier = Modifier.size(AssistChipDefaults.IconSize),
-                painter = painterResource(id = R.drawable.left_btn) ,
-                contentDescription = stringResource(
-                    R.string.back_content_description
+        if(isNavigable){
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(modifier = Modifier.size(AssistChipDefaults.IconSize),
+                     painter = painterResource(id = R.drawable.left_btn) ,
+                     contentDescription = stringResource(
+                         R.string.back_content_description
+                     )
                 )
-            )
+            }
         }
     })
 }
