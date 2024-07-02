@@ -112,7 +112,7 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
 }
 
 @Composable
-fun DetailScreenUserImage(customer: Customer) {
+private fun DetailScreenUserImage(customer: Customer) {
     Box(
         modifier = Modifier.background(color = Color.Transparent)
     ) {
@@ -129,7 +129,7 @@ fun DetailScreenUserImage(customer: Customer) {
 }
 
 @Composable
-fun InfoBioComponent(customer: Customer) {
+private fun InfoBioComponent(customer: Customer) {
     Column() {
         Text(
             text = customer.name, style = MaterialTheme.typography.bodyLarge
@@ -149,7 +149,7 @@ fun InfoBioComponent(customer: Customer) {
 }
 
 @Composable
-fun AssignedProfessionalComponent(customer: Customer) {
+private fun AssignedProfessionalComponent(customer: Customer) {
     Column(modifier = Modifier.padding(vertical = 10.dp)) {
         Text(
             text = "Assigned Professional",
@@ -165,7 +165,7 @@ fun AssignedProfessionalComponent(customer: Customer) {
 }
 
 @Composable
-fun VisitHistoryLazyColumn(visits: List<Visit>?) {
+private fun VisitHistoryLazyColumn(visits: List<Visit>?) {
     val visitList = mockedCustomer.visitHistory ?: emptyList()
     Column {
         visitList.forEach { visit ->
@@ -188,7 +188,7 @@ fun VisitHistoryLazyColumn(visits: List<Visit>?) {
 }
 
 @Composable
-fun VisitHistoryComponent(customer: Customer) {
+private fun VisitHistoryComponent(customer: Customer) {
     Text(
         text = "Visit History",
         style = MaterialTheme.typography.titleLarge,
