@@ -62,7 +62,7 @@ val mockedCustomer = Customer(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DetailPreview() {
+private fun DetailPreview() {
     val navigationController = rememberNavController()
     DetailCustomerScreen(navigationController = navigationController, "")
 }

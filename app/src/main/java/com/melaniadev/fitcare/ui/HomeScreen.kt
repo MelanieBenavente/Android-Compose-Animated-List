@@ -43,7 +43,7 @@ import com.melaniadev.fitcare.ui.theme.grayComponentsBackground
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Preview() {
+private fun Preview() {
     val navigationController = rememberNavController()
     CustomerListScreen(navigationController = navigationController)
 }
