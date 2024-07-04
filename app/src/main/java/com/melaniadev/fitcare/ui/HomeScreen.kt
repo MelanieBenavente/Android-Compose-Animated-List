@@ -51,7 +51,13 @@ private fun Preview() {
 @Composable
 private fun CustomerListScreenComponents(
     customersList: List<Customer>, navigationController: NavHostController, modifier: Modifier) {
-    LazyColumn(modifier = modifier.clickable { navigationController.navigate("DetailScreen") }) {
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(bottom = 140.dp),
+        modifier = modifier.fillMaxSize()
+    ) {
 
         item {
             SearchBarComponent(
@@ -74,29 +80,34 @@ private fun CustomerListScreenComponents(
 fun CustomerListScreen(navigationController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
-        TopBarBackButton(
-            isNavigable = false,
-            navController = navigationController,
-            title = stringResource(R.string.home_top_bar_title),
-            scrollBehavior = scrollBehavior
-        )
-    }, content = { padding ->
-        CustomerListScreenComponents(
-            modifier = Modifier.padding(padding),
-            customersList = mockList(),
-            navigationController = navigationController
-        )
-    })
+    Scaffold(
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize(),
+        topBar = {
+            TopBarBackButton(
+                isNavigable = false,
+                navController = navigationController,
+                title = stringResource(R.string.home_top_bar_title),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        content = { padding ->
+            CustomerListScreenComponents(
+                modifier = Modifier.padding(padding),
+                customersList = mockList(),
+                navigationController = navigationController
+            )
+        })
 }
 
 @Composable
 private fun ItemCustomerComponent(customer: Customer, navigationController: NavHostController) {
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable { navigationController.navigate(Routes.CUSTOMER_DETAIL.name + "/${customer.name}") }
-            .fillMaxWidth()
-            .padding(all = 16.dp)) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+
+        .clickable { navigationController.navigate(Routes.CUSTOMER_DETAIL.name + "/${customer.name}") }
+        .fillMaxWidth()
+        .padding(all = 16.dp)) {
         Box(
             modifier = Modifier.background(color = Color.Transparent)
         ) {
@@ -127,7 +138,12 @@ private fun FilterItemsBarComponent() {
                           FilterBarItem(title = "Next Visit Date", filterAction = {}),
                           FilterBarItem(title = "Add Visit", filterAction = {})
     )
-    Box(modifier = Modifier.fillMaxWidth().padding(top = 7.dp, bottom = 5.dp), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 7.dp, bottom = 5.dp),
+        contentAlignment = Alignment.Center
+    ) {
         LazyRow(
             state = rememberLazyListState()
         ) {
@@ -136,7 +152,8 @@ private fun FilterItemsBarComponent() {
                 Spacer(modifier = Modifier.width(12.dp))
                 Box(modifier = Modifier
                     .background(
-                        grayComponentsBackground, RoundedCornerShape(8.dp))
+                        grayComponentsBackground, RoundedCornerShape(8.dp)
+                    )
                     .padding(horizontal = 8.dp, vertical = 5.dp)
                     .clickable { item.filterAction() }) {
                     Text(
