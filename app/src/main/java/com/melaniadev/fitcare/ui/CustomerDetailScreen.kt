@@ -114,7 +114,7 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
 @Composable
 private fun DetailScreenUserImage(customer: Customer) {
     Box(
-        modifier = Modifier.background(color = Color.Transparent)
+        modifier = Modifier.padding(bottom = 15.dp).background(color = Color.Transparent)
     ) {
         AsyncImage(
             contentScale = ContentScale.Crop,
