@@ -1,9 +1,14 @@
 package com.melaniadev.fitcare.ui
 
 import android.util.Log
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +17,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,23 +31,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -51,7 +55,7 @@ import com.melaniadev.fitcare.ui.components.PersonalInfoComponent
 import com.melaniadev.fitcare.ui.components.SearchBarComponent
 import com.melaniadev.fitcare.ui.components.TopBarBackButton
 import com.melaniadev.fitcare.ui.theme.grayComponentsBackground
-import kotlin.math.abs
+import kotlin.math.roundToInt
 
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -61,88 +65,121 @@ private fun Preview() {
     CustomerListScreen(navigationController = navigationController)
 }
 
-@Composable
-private fun CustomerListScreenComponents(
-    customersList: List<Customer>, navigationController: NavHostController, modifier: Modifier) {
-    val listState = rememberLazyListState()
-
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(bottom = 140.dp),
-        modifier = modifier.fillMaxSize()
-    ) {
-
-        item {
-            SearchBarComponent(
-                iconDrawable = R.drawable.search_vector,
-                text = "Search patients",
-                contentDescription = "Search patients"
-            )
-        }
-        item {
-            FilterItemsBarComponent()
-        }
-        itemsIndexed(customersList) { index, customer ->
-            val offsetX = remember {
-                derivedStateOf {
-                    val currentItemInfo =
-                        listState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index }
-                            ?: return@derivedStateOf 0.dp
-                    val centerYOffset = listState.layoutInfo.viewportEndOffset / 3
-                    val endYOffset = listState.layoutInfo.viewportEndOffset
-                    val itemYOffset = currentItemInfo.offset + currentItemInfo.size / 3
-                    val totalViewLayout = endYOffset - centerYOffset
-
-                    val xTranslation = if (itemYOffset <= centerYOffset) {
-                        0.dp
-                    } else {
-                        val percentage =
-                            ((itemYOffset - centerYOffset) / totalViewLayout.toFloat()).coerceIn(
-                                0f, 1f
-                            )
-                        val dpTranslation = 1000.dp * percentage
-                        dpTranslation
-                    }
-                    xTranslation
-                }
-            }
-
-            Box(modifier = Modifier
-                .clickable { navigationController.navigate("DetailScreen/") }
-                .graphicsLayer {
-                    this.translationX = offsetX.value.toPx()
-                }) {
-                ItemCustomerComponent(customer, navigationController)
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerListScreen(navigationController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
-        topBar = {
-            TopBarBackButton(
-                isNavigable = false,
-                navController = navigationController,
-                title = stringResource(R.string.home_top_bar_title),
-                scrollBehavior = scrollBehavior
-            )
-        },
-        content = { padding ->
-            CustomerListScreenComponents(
-                modifier = Modifier.padding(padding),
-                customersList = mockList(),
-                navigationController = navigationController
-            )
-        })
+    Scaffold(modifier = Modifier
+        .nestedScroll(scrollBehavior.nestedScrollConnection)
+        .fillMaxSize(),
+             topBar = {
+                 TopBarBackButton(
+                     isNavigable = false,
+                     navController = navigationController,
+                     title = stringResource(R.string.home_top_bar_title),
+                     scrollBehavior = scrollBehavior
+                 )
+             },
+             content = { padding ->
+                 val scrollableState = rememberScrollState()
+                 Column(
+                     modifier = Modifier
+                         .padding(padding)
+                         .scrollable(scrollableState, orientation = Orientation.Vertical)
+                 ) {
+                     SearchBarComponent(
+                         iconDrawable = R.drawable.search_vector,
+                         text = "Search patients",
+                         contentDescription = "Search patients"
+                     )
+                     FilterItemsBarComponent()
+
+                     CustomerListScreenComponents(
+
+                         customersList = mockList(), navigationController = navigationController
+                     )
+                 }
+             })
 }
+
+@Composable
+private fun CustomerListScreenComponents(
+    customersList: List<Customer>,
+    navigationController: NavHostController,
+    modifier: Modifier = Modifier) {
+    val listState = rememberLazyListState()
+    var isItemVisible = remember { mutableStateMapOf<Int, Boolean>() }
+    var animationFinishedHashMap = remember { mutableStateMapOf<Int, Boolean>() }
+    LaunchedEffect(Unit) {
+        animationFinishedHashMap[0] = true
+    }
+    LazyColumn(
+        state = listState, modifier = modifier.fillMaxSize()
+    ) {
+        itemsIndexed(customersList) { actualIndex, customer ->
+
+            listState.layoutInfo.visibleItemsInfo.forEach {
+                Log.e(
+                    "control", "listado " + it.index
+                )
+            }
+            val isVisible = remember {
+                derivedStateOf {
+                    listState.layoutInfo.visibleItemsInfo.filter { actualIndex == it.index }
+                        .firstOrNull() != null
+                }
+            }
+
+            if (actualIndex <= listState.firstVisibleItemIndex) {
+                isItemVisible[actualIndex] = true
+                animationFinishedHashMap[actualIndex - 1] = true
+            }
+
+            if (isVisible.value) {
+                isItemVisible[actualIndex] = true
+                animationFinishedHashMap[listState.firstVisibleItemIndex] = true
+            } else {
+                isItemVisible[actualIndex] = false
+            }
+
+            Log.e("control", "index = " + actualIndex)
+            val initPx = with(LocalDensity.current) {
+                350.dp.toPx().roundToInt()
+            }
+            val targetValue =
+                if (isItemVisible[actualIndex] == true && (actualIndex == 0 || animationFinishedHashMap[actualIndex - 1] == true)) {
+                    Log.e("control", "index = " + actualIndex + "assigned px 0")
+
+                    0
+                } else {
+                    Log.e("control", "index = " + actualIndex + "assigned px 350")
+                    initPx
+                }
+
+            val offset by animateIntAsState(targetValue = targetValue,
+                                            label = "offset",
+                                            animationSpec = tween(
+                                                durationMillis = if (listState.isScrollInProgress) 200 else 50
+                                            ),
+                                            finishedListener = {
+                                                Log.e(
+                                                    "control", "animation finished: " + actualIndex
+                                                )
+                                                animationFinishedHashMap[actualIndex] = true
+                                            })
+
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .offset(x = offset.dp)
+                .clickable { navigationController.navigate("DetailScreen/") }) {
+                ItemCustomerComponent(customer, navigationController)
+            }
+
+        }
+    }
+}
+
 
 @Composable
 private fun ItemCustomerComponent(customer: Customer, navigationController: NavHostController) {
