@@ -89,6 +89,7 @@ fun CustomerListScreen(
             )
         },
         content = { padding ->
+            val customerList = mockList()
             LazyColumn(
                 modifier = Modifier
                     .padding(padding)
@@ -103,14 +104,14 @@ fun CustomerListScreen(
                             contentDescription = "Search patients"
                         )
                         FilterItemsBarComponent()
-
                     }
                 }
 
-                itemsIndexed(mockList()) { actualIndex, customer ->
+                itemsIndexed(customerList) { actualIndex, customer ->
                     AnimatedItemListComponent(
                         actualIndex,
                         customer,
+                        customerList.size,
                         isItemVisible,
                         listState,
                         animationFinishedHashMap,
@@ -125,19 +126,16 @@ fun CustomerListScreen(
 private fun AnimatedItemListComponent(
     actualIndex: Int,
     customer: Customer,
+    customerListSize: Int,
     isItemVisible: SnapshotStateMap<Int, Boolean>,
     listState: LazyListState,
     animationFinishedHashMap: SnapshotStateMap<Int, Boolean>,
     navigationController: NavHostController
 ) {
+    val difference =
+        if (listState.layoutInfo.totalItemsCount == 0) 0 else (listState.layoutInfo.totalItemsCount - customerListSize)
     val correctedIndex =
-        if (actualIndex == listState.layoutInfo.totalItemsCount) listState.layoutInfo.totalItemsCount else actualIndex + 1
-
-    listState.layoutInfo.visibleItemsInfo.forEach {
-        Log.e(
-            "control", "listado " + it.index
-        )
-    }
+        if (actualIndex == listState.layoutInfo.totalItemsCount) listState.layoutInfo.totalItemsCount else actualIndex + difference
     val isVisible = remember {
         derivedStateOf {
             listState.layoutInfo.visibleItemsInfo.filter { correctedIndex == it.index }
@@ -157,17 +155,13 @@ private fun AnimatedItemListComponent(
         isItemVisible[correctedIndex] = false
     }
 
-    Log.e("control", "index = " + correctedIndex)
     val initPx = with(LocalDensity.current) {
         350.dp.toPx().roundToInt()
     }
     val targetValue =
         if (isItemVisible[correctedIndex] == true && (correctedIndex == 0 || animationFinishedHashMap[correctedIndex - 1] == true)) {
-            Log.e("control", "index = " + correctedIndex + "assigned px 0")
-
             0
         } else {
-            Log.e("control", "index = " + correctedIndex + "assigned px 350")
             initPx
         }
 
@@ -177,9 +171,6 @@ private fun AnimatedItemListComponent(
             durationMillis = if (listState.isScrollInProgress) 200 else 50
         ),
         finishedListener = {
-            Log.e(
-                "control", "animation finished: " + correctedIndex
-            )
             animationFinishedHashMap[correctedIndex] = true
         })
 
@@ -203,7 +194,7 @@ private fun ItemCustomerComponent(customer: Customer, navigationController: NavH
         ) {
             AsyncImage(
                 contentScale = ContentScale.Crop,
-                model = "https://picsum.photos/200/300",
+                model = customer.imageUrl,
                 contentDescription = "Image",
                 modifier = Modifier
                     .clip(CircleShape)
@@ -232,7 +223,7 @@ private fun FilterItemsBarComponent() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 7.dp, bottom = 5.dp),
+            .padding(top = 7.dp, bottom = 5.dp, end = 14.dp),
         contentAlignment = Alignment.Center
     ) {
         LazyRow(
