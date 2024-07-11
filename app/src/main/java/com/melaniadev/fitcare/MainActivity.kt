@@ -3,6 +3,8 @@ package com.melaniadev.fitcare
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -22,11 +24,17 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
-                    
+
                 ) {
                     val navigationController = rememberNavController()
-                    NavHost(navController = navigationController, startDestination = Routes.HOME.name){
-                       getNavGraph(navigationController)
+
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = Routes.HOME.name,
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { ExitTransition.None }
+                    ) {
+                        getNavGraph(navigationController)
                     }
                 }
             }
