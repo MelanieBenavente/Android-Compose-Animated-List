@@ -11,8 +11,7 @@ enum class Routes {
 fun NavGraphBuilder.getNavGraph(navigationController: NavHostController) {
     composable(Routes.HOME.name) {
         CustomerListScreen(
-            customersList = mockList(),
-            navigationController
+           navigationController
         )
     }
     composable(Routes.CUSTOMER_DETAIL.name + "/{name}") { backStackEntry ->

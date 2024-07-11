@@ -12,7 +12,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val primaryBlue = Color(color = 0XFF498c8e)
 val secondaryBlue = Color(color = 0XFFA2DBE0)
-val iconComponentBackground = Color(color = 0xFFF0F2F5)
+val grayComponentsBackground = Color(color = 0xFFF0F2F5)
 data class CustomColorsPalette(val customTextColor: Color = Color.Unspecified, val customButtonTextColor: Color = Color.Unspecified)
 //dark colors
 val darkGray = Color(color = 0xFF637587)

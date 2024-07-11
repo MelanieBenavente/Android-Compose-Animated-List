@@ -37,32 +37,10 @@ import com.melaniadev.fitcare.ui.components.LeftImageInfoComponent
 import com.melaniadev.fitcare.ui.components.TopBarBackButton
 import com.melaniadev.fitcare.ui.theme.localCustomColorsPalette
 
-val visitHistoryMocked = listOf(
-    Visit(
-        typeOfVisit = "Massage Therapy", date = "Apr 24, 2023"
-    ), Visit(
-        typeOfVisit = "Acupunture", date = "Feb 10, 2025"
-    )
-)
-
-val mockedCustomer = Customer(
-    customerName = "Ava Smith",
-    lastVisit = null,
-    nextVisit = null,
-    professional = Professional("Dr. Mathews", Therapy.PHYSICAL, null),
-    gender = Gender.FEMALE,
-    age = "32",
-    weight = "42",
-    height = "1.50",
-    email = "lavienvert@gmail.com",
-    phone = "635 23 96 35",
-    imageUrl = "https://picsum.photos/200/300",
-    visitHistory = visitHistoryMocked
-)
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun DetailPreview() {
+private fun DetailPreview() {
     val navigationController = rememberNavController()
     DetailCustomerScreen(navigationController = navigationController, "")
 }
@@ -72,8 +50,11 @@ fun DetailPreview() {
 fun DetailCustomerScreen(navigationController: NavHostController, name: String) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val mockedCustomer = mockList().filter { name == it.name }.firstOrNull()
+
     Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
         TopBarBackButton(
+            isNavigable = true,
             navigationController,
             title = stringResource(R.string.user_profile_top_bar_title),
             scrollBehavior = scrollBehavior
@@ -88,7 +69,7 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
             DetailScreenUserImage(customer = mockedCustomer)
             InfoBioComponent(customer = mockedCustomer)
             ActionButtonsComponent(navigationController = navigationController)
-            mockedCustomer.email?.let {
+            mockedCustomer?.email?.let {
                 LeftIconInfoComponent(
                     iconDrawable = R.drawable.email_vector,
                     contentDescription = "Email",
@@ -96,7 +77,7 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
                     body = it
                 )
             }
-            mockedCustomer.phone?.let {
+            mockedCustomer?.phone?.let {
                 LeftIconInfoComponent(
                     iconDrawable = R.drawable.phone_vector,
                     contentDescription = "Phone number",
@@ -111,13 +92,13 @@ fun DetailCustomerScreen(navigationController: NavHostController, name: String) 
 }
 
 @Composable
-fun DetailScreenUserImage(customer: Customer) {
+private fun DetailScreenUserImage(customer: Customer?) {
     Box(
-        modifier = Modifier.background(color = Color.Transparent)
+        modifier = Modifier.padding(bottom = 15.dp).background(color = Color.Transparent)
     ) {
         AsyncImage(
             contentScale = ContentScale.Crop,
-            model = customer.imageUrl,
+            model = customer?.imageUrl,
             contentDescription = "Image profile",
             modifier = Modifier
                 .clip(CircleShape)
@@ -128,19 +109,21 @@ fun DetailScreenUserImage(customer: Customer) {
 }
 
 @Composable
-fun InfoBioComponent(customer: Customer) {
+private fun InfoBioComponent(customer: Customer?) {
     Column() {
+        customer?.name?.let {
+            Text(
+                text = it, style = MaterialTheme.typography.bodyLarge
+            )
+        }
         Text(
-            text = customer.name, style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = customer.gender.genderType + ", " + customer.age + " years old",
+            text = customer?.gender?.genderType + ", " + customer?.age + " years old",
             style = MaterialTheme.typography.bodyMedium,
             color = localCustomColorsPalette.current.customTextColor
 
         )
         Text(
-            text = customer.height + " cm" + " | " + customer.weight + " kg",
+            text = customer?.height + "cm" + " | " + customer?.weight + "kg",
             style = MaterialTheme.typography.bodyMedium,
             color = localCustomColorsPalette.current.customTextColor
         )
@@ -148,26 +131,27 @@ fun InfoBioComponent(customer: Customer) {
 }
 
 @Composable
-fun AssignedProfessionalComponent(customer: Customer) {
+private fun AssignedProfessionalComponent(customer: Customer?) {
     Column(modifier = Modifier.padding(vertical = 10.dp)) {
         Text(
             text = "Assigned Professional",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(vertical = 10.dp)
         )
-        LeftImageInfoComponent(
-            imageUrl = "https://picsum.photos/200/300",
-            header = customer.professional.name,
-            body = customer.professional.therapyType?.therapyType.orEmpty()
-        )
+        customer?.professional?.name?.let {
+            LeftImageInfoComponent(
+                imageUrl = "https://picsum.photos/id/1/200/300",
+                header = it,
+                body1 = customer.professional.therapyType?.nameOfTherapy.orEmpty()
+            )
+        }
     }
 }
 
 @Composable
-fun VisitHistoryLazyColumn(visits: List<Visit>?) {
-    val visitList = mockedCustomer.visitHistory ?: emptyList()
+private fun VisitHistoryLazyColumn(visits: List<Visit>?) {
     Column {
-        visitList.forEach { visit ->
+        visits?.forEach { visit ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,13 +171,13 @@ fun VisitHistoryLazyColumn(visits: List<Visit>?) {
 }
 
 @Composable
-fun VisitHistoryComponent(customer: Customer) {
+private fun VisitHistoryComponent(customer: Customer?) {
     Text(
         text = "Visit History",
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(top = 20.dp)
     )
-    VisitHistoryLazyColumn(visits = customer.visitHistory)
+    VisitHistoryLazyColumn(visits = customer?.visitHistory)
 }
 
 
