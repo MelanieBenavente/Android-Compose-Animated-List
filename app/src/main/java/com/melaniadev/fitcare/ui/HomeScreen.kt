@@ -1,6 +1,5 @@
 package com.melaniadev.fitcare.ui
 
-import android.util.Log
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
