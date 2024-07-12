@@ -27,7 +27,6 @@ fun NavGraphBuilder.getNavGraph(navigationController: NavHostController) {
     }
     composable(
         Routes.CUSTOMER_DETAIL.name + "/{name}",
-        arguments = listOf(navArgument("name") { type = NavType.StringType }),
         enterTransition = {
             fadeIn(
                 animationSpec = tween(
