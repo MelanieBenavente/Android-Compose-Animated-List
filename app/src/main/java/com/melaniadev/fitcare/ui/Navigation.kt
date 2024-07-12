@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 enum class Routes {
     HOME, CUSTOMER_DETAIL
 }
-
+//test
 fun NavGraphBuilder.getNavGraph(navigationController: NavHostController) {
     composable(Routes.HOME.name) {
         CustomerListScreen(
