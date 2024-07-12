@@ -2,6 +2,16 @@
 
 This project demonstrates a composable function in Jetpack Compose that animates a list of customers within a `LazyColumn`, ensuring headers and other non-list items do not interfere with the animation.
 
+## Video and Animated GIF
+
+### Video Demo
+
+[Watch video on Google Drive](https://drive.google.com/file/d/1PK02zdPFqsw3jKSifB7DK3K12qAKX3fJ/view?usp=sharing)
+
+### Animated GIF
+
+![Animated List](https://github.com/MelanieBenavente/Android-Compose-Animated-List/blob/master/AnimatedListCompose-ezgif.com-video-to-gif-converter.gif?raw=true)
+
 ## Overview
 
 The main component of this project is the `CustomerListScreen` composable function. It displays a list of customers with animated list items, using Jetpack Compose's `LazyColumn`. Each item animates its position when it becomes visible.
@@ -31,13 +41,3 @@ The `ItemCustomerComponent` composable displays detailed information about each 
 The `FilterItemsBarComponent` provides a horizontal list of filter options for further interaction with the customer list.
 
 This section summarizes how these components work together to create an animated and interactive customer list experience within the application.
-
-## Video and Animated GIF
-
-### Video Demo
-
-[Watch video on Google Drive](https://drive.google.com/file/d/1PK02zdPFqsw3jKSifB7DK3K12qAKX3fJ/view?usp=sharing)
-
-### Animated GIF
-
-![Animated List](https://github.com/MelanieBenavente/Android-Compose-Animated-List/blob/master/AnimatedListCompose-ezgif.com-video-to-gif-converter.gif?raw=true)
