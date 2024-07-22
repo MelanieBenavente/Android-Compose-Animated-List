@@ -52,12 +52,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ScreenOrientation(context: Context) {
-    val portrait = remember { mutableStateOf(true) }
     val activity = context as Activity
-    if (portrait.value) {
         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-    portrait.value = !portrait.value
 }
 
 
