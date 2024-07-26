@@ -1,5 +1,6 @@
 package com.melaniadev.fitcare.ui
 
+import androidx.compose.animation.core.EaseOutCirc
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -164,11 +165,12 @@ private fun AnimatedItemListComponent(
             initPx
         }
 
+
     val offset by animateIntAsState(targetValue = targetValue,
         label = "offset",
         animationSpec = tween(
-            durationMillis = if (listState.isScrollInProgress) 200 else 50
-        ),
+            durationMillis = 250,
+            easing = EaseOutCirc),
         finishedListener = {
             animationFinishedHashMap[correctedIndex] = true
         })
